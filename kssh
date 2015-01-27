@@ -4,8 +4,20 @@ set -euo pipefail
 query="$1"
 command="$2"
 
-hosts="$(k search "$query" -Fj -a fqdn | jq -r '.rows[][].fqdn' | tr '\n' ' ')"
+KNIFE="knife"
+PSSH="pssh"
 
-pssh -P -H "$hosts" "$command"
+if hash -r k 2>/dev/null; then
+  KNIFE="k"
+fi
+
+if hash -r parallel-ssh; then
+  PSSH="parallel-ssh"
+fi
+
+
+hosts="$($KNIFE search "$query" -Fj -a fqdn | jq -r '.rows[][].fqdn' | tr '\n' ' ')"
+
+"$PSSH" -P -H "$hosts" "$command"
 
 exit 0
