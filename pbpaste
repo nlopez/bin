@@ -1,0 +1,4 @@
+#!/bin/sh
+if hash -r xclip 2>/dev/null; then
+  xclip -out -selection clipboard
+fi
