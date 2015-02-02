@@ -1,0 +1,5 @@
+#!/bin/sh
+export TZ=UTC
+if [ "x$TMUX" = "x" ]; then
+  tmux new-session -s 0 -A
+fi
