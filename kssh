@@ -11,7 +11,7 @@ if hash -r k 2>/dev/null; then
   KNIFE="k"
 fi
 
-if hash -r parallel-ssh; then
+if hash -r parallel-ssh 2>/dev/null; then
   PSSH="parallel-ssh"
 fi
 
