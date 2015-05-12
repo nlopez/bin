@@ -7,11 +7,11 @@ command="$2"
 KNIFE="knife"
 PSSH="pssh"
 
-if hash -r k 2>/dev/null; then
+if hash k 2>/dev/null; then
   KNIFE="k"
 fi
 
-if hash -r parallel-ssh 2>/dev/null; then
+if hash parallel-ssh 2>/dev/null; then
   PSSH="parallel-ssh"
 fi
 
