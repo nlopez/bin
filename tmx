@@ -1,6 +1,10 @@
 #!/bin/sh
 export TZ=UTC
 PATH="${PATH}:/usr/local/bin"
+COMMAND="tmux"
+if hash reattach-to-user-namespace 2>/dev/null; then
+  COMMAND="reattach-to-user-namespace $COMMAND"
+fi
 if [ "x$TMUX" = "x" ]; then
-  tmux new-session -s 0 -A
+  eval "$COMMAND" new-session -s 0 -A
 fi
