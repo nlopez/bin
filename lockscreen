@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ "$(uname)" == "Darwin" ]; then
+  /System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend
+else
+  echo "I don't know how to lock the screen on non-OS X platform" >&2
+  exit 1
+fi
+
