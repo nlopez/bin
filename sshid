@@ -1,5 +1,15 @@
 #!/bin/sh
-ip="$(aws ec2 describe-instances --instance-id "$1" | jq -r '.Reservations[].Instances[].PrivateIpAddress')"
+readonly arg1="$1"
+echo "$arg1" | egrep -q '^sir\-'
+is_spot=$?
+
+if [ $is_spot = 0  ]; then
+  instance_id="$(aws ec2 describe-spot-instance-requests --spot-instance-request-ids "$arg1" | jq -r '.[][].InstanceId')"
+else
+  instance_id="$arg1"
+fi
+
+ip="$(aws ec2 describe-instances --instance-id "$instance_id" | jq -r '.Reservations[].Instances[].PrivateIpAddress')"
 echo "$ip" | egrep -q '([0-9]\.){1,3}[0-9]{1,3}'
 if [ $? != 0 ]; then
   echo "Can't determine private IP; aborting" >2
