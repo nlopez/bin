@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# oh-my-zsh bonus hosts completion: `compctl -k hosts multitap`
+
+myssh(){
+  ssh -C $1 sudo tcpdump -U -iany 'not port 22' -s0 -w -
+}
+
+compose(){
+  command="mergecap -F libpcap -w -"
+  for var in "$@"; do
+    command="$command <(myssh $var)"
+  done
+  command="$command | wireshark -N nN -k -i -"
+}
+
+usage(){
+  echo "Usage: $(basename $0) <hostnameA> [<hostnameB>] ... [<hostname N>]"
+  echo "You must be able to sudo and run tcpdump on all hosts."
+  exit 1
+}
+
+if (( $# < 1 )); then usage; fi
+
+compose "$@"
+eval "$command"
