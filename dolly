@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+from pipes import quote
+from subprocess import call
+from urlparse import urlparse
+import argparse
+import os
+
+# clones a git repo into a dir hierarchy based
+# on its url. for example, https://github.com/nlopez/bin
+# will be cloned into ~/src/github.com/nlopez/bin
+
+parser = argparse.ArgumentParser()
+parser.add_argument("url", help="git clone <url>")
+args = parser.parse_args()
+
+home = os.path.expanduser("~")
+url = urlparse(args.url)
+clone_destination = home + '/src/' + url.netloc + url.path
+command = 'git clone {} {}'.format(url.geturl(), clone_destination)
+command = command.format(quote(command))
+
+call(command, shell=True)
