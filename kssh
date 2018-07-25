@@ -18,6 +18,6 @@ fi
 
 hosts="$($KNIFE search "$query" -Fj -a fqdn | jq -r '.rows[][].fqdn' | tr '\n' ' ')"
 
-"$PSSH" -P -H "$hosts" "$command"
+"$PSSH" -p 10 -t 0 -i -H "$hosts" "$command"
 
 exit 0
