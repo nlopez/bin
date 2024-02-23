@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
-# Usage: Use similarily to how you'd run "terraform plan". Extra args are passed to plan:
-#   tfdiff -target='module.some_module'
+###############################################################################
+# ABOUT
+#   Diffs terraform plan output in vscode. Useful in cases where terraform's
+#   concise plan output is hiding details you care about.
+#
+# USAGE
+#   Use similarily to how you'd run "terraform plan".
+#   Extra args are passed to plan:
+#     tfdiff -target='module.some_module'
+#
+# REQUIRES
+#   terraform
+#   jq
+#   code (vscode)
+###############################################################################
 set -euo pipefail
 export IFS=$'\n\t'
 
