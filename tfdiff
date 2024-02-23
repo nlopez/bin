@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Usage: Use similarily to how you'd run "terraform plan". Extra args are passed to plan:
+#   tfdiff -target='module.some_module'
+set -euo pipefail
+export IFS=$'\n\t'
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rfv $tmpdir' EXIT
+
+export TF_IN_AUTOMATION=1
+(
+  terraform plan -out "$tmpdir/tfplan" "$*" >/dev/null
+  terraform show -json "$tmpdir/tfplan" | jq '.resource_changes[] | select(.change.actions as $actions | "no-op" | IN($actions[]) | not) | [.change.before]' > "$tmpdir/before.json"
+  terraform show -json "$tmpdir/tfplan" | jq '.resource_changes[] | select(.change.actions as $actions | "no-op" | IN($actions[]) | not) | [.change.after]' > "$tmpdir/after.json"
+  code --wait --diff "$tmpdir/before.json" "$tmpdir/after.json"
+)
