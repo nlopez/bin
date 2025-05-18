@@ -1,0 +1,6 @@
+#returns the dotted-decimal ascii form of an IP arg passed in integer format
+integer_ip=$1
+echo -n $(($(($(($((integer_ip/256))/256))/256))%256)).
+echo -n $(($(($((integer_ip/256))/256))%256)).
+echo -n $(($((integer_ip/256))%256)).
+echo $((integer_ip%256))
