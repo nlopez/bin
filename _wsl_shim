@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# uname logic cribbed from https://github.com/microsoft/WSL/issues/4071#issuecomment-1223393940
+unameOut=$(uname -a)
+case "${unameOut}" in
+  *Microsoft*) OS="WSL";; #wls must be first since it will have Linux in the name too
+  *microsoft*) OS="WSL2";;
+  Linux*)      OS="Linux";;
+  Darwin*)     OS="Mac";;
+  CYGWIN*)     OS="Cygwin";;
+  MINGW*)      OS="Windows";;
+  *Msys)       OS="Windows";;
+  *)           OS="UNKNOWN:${unameOut}"
+esac
+
+# Get the name of the binary being executed
+BINARY_NAME=$(basename "$0")
+
+if [[ "${OS}" == "WSL"* ]]; then
+  eval "${BINARY_NAME}.exe $@"
+else
+  eval "${BINARY_NAME} $@"
+fi
