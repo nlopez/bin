@@ -1,5 +1,2 @@
 #!/bin/sh
-PATH="${PATH}:/usr/local/bin"
-if [ "x$TMUX" = "x" ]; then
-  tmux -u new-session -s 0 -A
-fi
+exec tmux -u new-session -s 0 -A
