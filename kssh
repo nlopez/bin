@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+query="$1"
+command="$2"
+
+hosts="$(k search "$query" -Fj -a fqdn | jq -r '.rows[][].fqdn' | tr '\n' ' ')"
+
+pssh -P -H "$hosts" "$command"
+
+exit 0
