@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+KNIFE="knife"
+
+if hash -r k 2>/dev/null; then
+  KNIFE="k"
+fi
+
+$KNIFE node delete -y "$1"
+$KNIFE client delete -y "$1"
+
+exit 0
