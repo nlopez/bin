@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Parameters from https://developers.google.com/media/vp9/settings/vod/#ffmpeg_command_lines
+set -euo pipefail
+(eval ffmpeg "$*" -vf scale=1280x720 -b:v 1024k \
+  -minrate 512k -maxrate 1485k -tile-columns 2 -g 240 -threads 8 \
+  -quality good -crf 32 -c:v libvpx-vp9 -c:a libopus \
+  -pass 1 -speed 4 && \
+eval ffmpeg "$*" -vf scale=1280x720 -b:v 1024k \
+  -minrate 512k -maxrate 1485k -tile-columns 2 -g 240 -threads 8 \
+  -quality good -crf 32 -c:v libvpx-vp9 -c:a libopus \
+  -pass 2 -speed 4 -y)
