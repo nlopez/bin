@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
 # uname logic cribbed from https://github.com/microsoft/WSL/issues/4071#issuecomment-1223393940
+# op env vars idea from https://www.1password.community/discussions/developers/is-it-possible-for-1password-cli-running-on-wsl-to-connect-with-1password-hosted/93181/replies/93217
+
 unameOut=$(uname -a)
 case "${unameOut}" in
-  *Microsoft*) OS="WSL";; #wls must be first since it will have Linux in the name too
-  *microsoft*) OS="WSL2";;
+*Microsoft*) OS="WSL" ;; #wls must be first since it will have Linux in the name too
+*microsoft*) OS="WSL2" ;;
 esac
 
 # Get the name of the binary being executed
 BINARY_NAME=$(basename "$0")
 
 if [[ "${OS}" == "WSL"* ]]; then
+  case "$BINARY_NAME" in
+    op)
+      mapfile -d '' op_env_vars < <(env -0 | grep -z ^OP_ | cut -z -d= -f1)
+      export WSLENV="${WSLENV:-}:$(
+        IFS=:
+        echo "${op_env_vars}"
+      )"
+      ;;
+  esac
   BINARY_NAME="${BINARY_NAME}.exe"
 fi
 
