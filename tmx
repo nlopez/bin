@@ -1,5 +1,6 @@
 #!/bin/sh
 export TZ=UTC
+export PATH="${PATH}:/usr/local/bin"
 if [ "x$TMUX" = "x" ]; then
   tmux new-session -s 0 -A
 fi
