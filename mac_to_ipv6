@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# http://unix.stackexchange.com/questions/79349/convert-mac-address-to-link-local-address-with-bash
+set -euo pipefail
+
+function mac_to_ipv6 {
+  IFS=':'; set $1; unset IFS
+  local ipv6_address="fe80::$(printf %02x $((0x$1 ^ 2)))$2:${3}ff:fe$4:$5$6"
+  echo "$ipv6_address"
+}
+
+mac_to_ipv6 "$1"
