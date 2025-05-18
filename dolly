@@ -15,7 +15,8 @@ args = parser.parse_args()
 
 home = os.path.expanduser("~")
 url = urlparse(args.url)
-clone_destination = home + "/src/" + url.netloc + url.path
+_netloc = url.netloc.split('@')[-1]
+clone_destination = home + "/src/" + _netloc + url.path
 command = "git clone {} {}".format(url.geturl(), clone_destination)
 command = command.format(quote(command))
 
