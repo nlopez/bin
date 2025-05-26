@@ -1,0 +1,2 @@
+#!/bin/sh
+exec op inject -f -i ~/.config/rclone/rclone.conf.tpl -o ~/.config/rclone/rclone.conf
