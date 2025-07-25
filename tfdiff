@@ -22,8 +22,8 @@ trap 'rm -rf $tmpdir' EXIT
 
 export TF_IN_AUTOMATION=1
 (
-  terraform plan -out "$tmpdir/tfplan" "$*" >/dev/null
+  terraform plan -out "$tmpdir/tfplan" -lock=false -refresh=false >/dev/null
   terraform show -json "$tmpdir/tfplan" | jq '[.resource_changes[] | select(.change.actions as $actions | "no-op" | IN($actions[]) | not) | .change.before]' > "$tmpdir/before.json"
   terraform show -json "$tmpdir/tfplan" | jq '[.resource_changes[] | select(.change.actions as $actions | "no-op" | IN($actions[]) | not) | .change.after]' > "$tmpdir/after.json"
-  code --add --wait --diff "$tmpdir/before.json" "$tmpdir/after.json"
+  cursor --add --wait --diff "$tmpdir/before.json" "$tmpdir/after.json"
 )
