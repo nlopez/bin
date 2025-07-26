@@ -9,6 +9,8 @@ unameOut=$(uname -a)
 case "${unameOut}" in
 *Microsoft*) OS="WSL" ;; # WSL must be first since it will have Linux in the name too
 *microsoft*) OS="WSL2" ;;
+*Darwin*)    OS="Mac";;
+*Linux*)     OS="Linux" ;;
 esac
 
 BINARY_NAME=$(basename "$0")
@@ -26,6 +28,11 @@ if [[ "${OS}" == "WSL"* ]]; then
     ;;
   esac
   BINARY_NAME="${BINARY_NAME}.exe"
+fi
+
+if [[ $BINARY_NAME == "tailscale" && ${OS} == "Mac" ]]; then
+  # On macOS, we need to use the tailscale binary from the Tailscale app bundle
+  BINARY_NAME="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 fi
 
 exec "$BINARY_NAME" "$@"
