@@ -7,12 +7,31 @@
 
 unameOut=$(uname -a)
 case "${unameOut}" in
+<<<<<<< HEAD
 *Microsoft*) OS="WSL" ;; # WSL must be first since it will have Linux in the name too
 *microsoft*) OS="WSL2" ;;
 *Darwin*)    OS="Mac";;
 *Linux*)     OS="Linux" ;;
 esac
 
+=======
+  *Microsoft*) OS="WSL";; #wls must be first since it will have Linux in the name too
+  *microsoft*) OS="WSL2";;
+  Linux*)      OS="Linux";;
+  Darwin*)     OS="Mac";;
+  CYGWIN*)     OS="Cygwin";;
+  MINGW*)      OS="Windows";;
+  *Msys)       OS="Windows";;
+  *)           OS="UNKNOWN:${unameOut}"
+esac
+
+if [[ "${OS}" == "Mac" ]] && sysctl -n machdep.cpu.brand_string | grep -q 'Apple M1'; then
+  #Check if its an M1. This check should work even if the current processes is running under x86 emulation.
+  OS="MacM1"
+fi
+
+# Get the name of the binary being executed
+>>>>>>> b1ecf06 (update os shim)
 BINARY_NAME=$(basename "$0")
 
 if [[ "${OS}" == "WSL"* ]]; then
@@ -30,9 +49,20 @@ if [[ "${OS}" == "WSL"* ]]; then
   BINARY_NAME="${BINARY_NAME}.exe"
 fi
 
+<<<<<<< HEAD
 if [[ $BINARY_NAME == "tailscale" && ${OS} == "Mac" ]]; then
   # On macOS, we need to use the tailscale binary from the Tailscale app bundle
   BINARY_NAME="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 fi
+=======
+case "$BINARY_NAME" in
+  tailscale)
+    if [[ "${OS}" == "Mac"* ]]; then
+      BINARY_NAME="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+    fi
+    ;;
+  *)
+esac
+>>>>>>> b1ecf06 (update os shim)
 
 exec "$BINARY_NAME" "$@"
