@@ -7,14 +7,6 @@
 
 unameOut=$(uname -a)
 case "${unameOut}" in
-<<<<<<< HEAD
-*Microsoft*) OS="WSL" ;; # WSL must be first since it will have Linux in the name too
-*microsoft*) OS="WSL2" ;;
-*Darwin*)    OS="Mac";;
-*Linux*)     OS="Linux" ;;
-esac
-
-=======
   *Microsoft*) OS="WSL";; #wls must be first since it will have Linux in the name too
   *microsoft*) OS="WSL2";;
   Linux*)      OS="Linux";;
@@ -31,7 +23,6 @@ if [[ "${OS}" == "Mac" ]] && sysctl -n machdep.cpu.brand_string | grep -q 'Apple
 fi
 
 # Get the name of the binary being executed
->>>>>>> b1ecf06 (update os shim)
 BINARY_NAME=$(basename "$0")
 
 if [[ "${OS}" == "WSL"* ]]; then
@@ -49,12 +40,6 @@ if [[ "${OS}" == "WSL"* ]]; then
   BINARY_NAME="${BINARY_NAME}.exe"
 fi
 
-<<<<<<< HEAD
-if [[ $BINARY_NAME == "tailscale" && ${OS} == "Mac" ]]; then
-  # On macOS, we need to use the tailscale binary from the Tailscale app bundle
-  BINARY_NAME="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
-fi
-=======
 case "$BINARY_NAME" in
   tailscale)
     if [[ "${OS}" == "Mac"* ]]; then
@@ -63,6 +48,5 @@ case "$BINARY_NAME" in
     ;;
   *)
 esac
->>>>>>> b1ecf06 (update os shim)
 
 exec "$BINARY_NAME" "$@"
