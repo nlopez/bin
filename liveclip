@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+VIDEO_ID="$1"
+LIVE_FROM="$2"
+
+if [[ -z "${VIDEO_ID}" || -z "${LIVE_FROM}" ]]; then
+  echo "Error: VIDEO_ID and LIVE_FROM are required, in that order."
+  exit 1
+fi
+
+ytarchive \
+  --cookies "${COOKIES:-/dev/null}" \
+  --debug \
+  --live-from \
+  "${LIVE_FROM}" \
+  --capture-duration "${CAPTURE_DURATION:-300s}" \
+  "https://www.youtube.com/watch?v=${VIDEO_ID}" \
+  "${RESOLUTION:-720p}"
